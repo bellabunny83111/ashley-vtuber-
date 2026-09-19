@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Ashley’s Magical Birthday Playground"
+description = "A polished mobile-first kawaii birthday game where Ashley performs expressive K-pop-inspired emotes in a stationary strawberry-coquette room, with magical effects, synthesized sounds, haptics, optional camera/voice/motion controls, Easter eggs, and a dramatic birthday finale."
+version = "1.0.0"
+id = "artifacts/ashley-birthday-playground"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22028
+
+[services.development]
+run = "pnpm --filter @workspace/ashley-birthday-playground run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/ashley-birthday-playground", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/ashley-birthday-playground/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22028"
+BASE_PATH = "/"
