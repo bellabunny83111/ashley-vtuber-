@@ -1,1 +1,1 @@
-const C='ashley-studio-v1',A=['./','./index.html','./assets/ashley-studio.png','./manifest.webmanifest'];self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+const C='ashley-studio-v1',A=['./','./index.html','./ashley-studio.png','./manifest.webmanifest'];self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
