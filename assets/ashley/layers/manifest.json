@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "layers": [
+    "body.png",
+    "head.png",
+    "hair-back.png",
+    "hair-left.png",
+    "hair-right.png",
+    "hair-front.png",
+    "arm-left.png",
+    "arm-right.png",
+    "eyes-open.png",
+    "eyes-blink.png",
+    "mouth-neutral.png",
+    "mouth-open.png",
+    "bunny-ear-left.png",
+    "bunny-ear-right.png",
+    "hand-heart-left.png",
+    "hand-heart-right.png",
+    "microphone.png"
+  ]
+}
