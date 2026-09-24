@@ -1,10 +1,11 @@
 {
-  "version": 2,
+  "version": 3,
   "canvas": {
     "width": 2048,
     "height": 2048,
-    "registration": "all PNGs share identical transparent canvas"
+    "registration": "identical transparent canvas for every production layer"
   },
+  "status": "runtime contract ready; binary PNG extraction is being registered against full-character reference",
   "layers": [
     "00_back_hair.png",
     "01_body_outfit.png",
@@ -18,7 +19,12 @@
     "09_eye_r_closed.png",
     "10_brow_l.png",
     "11_brow_r.png",
-    "12_mouth.png",
+    "12_mouth_closed.png",
+    "12_mouth_small.png",
+    "12_mouth_talk1.png",
+    "12_mouth_talk2.png",
+    "12_mouth_talk3.png",
+    "12_mouth_wide.png",
     "13_front_hair_l.png",
     "14_front_hair_r.png",
     "15_curl_l.png",
@@ -27,8 +33,19 @@
     "18_bunny_ear_r.png",
     "19_arm_l.png",
     "20_arm_r.png",
-    "21_accessories.png"
+    "21_accessories.png",
+    "22_skirt_front.png",
+    "23_sleeve_l.png",
+    "24_sleeve_r.png"
   ],
+  "mouthStates": {
+    "closed": "12_mouth_closed.png",
+    "small": "12_mouth_small.png",
+    "talk1": "12_mouth_talk1.png",
+    "talk2": "12_mouth_talk2.png",
+    "talk3": "12_mouth_talk3.png",
+    "wide": "12_mouth_wide.png"
+  },
   "parameters": [
     "headX",
     "headY",
@@ -44,5 +61,8 @@
     "browL",
     "browR",
     "breath"
-  ]
+  ],
+  "tools": {
+    "validator": "rig/bellabunny-layer-validator.html"
+  }
 }
