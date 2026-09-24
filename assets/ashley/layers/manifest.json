@@ -1,11 +1,11 @@
 {
-  "version": 3,
+  "version": 4,
   "canvas": {
     "width": 2048,
     "height": 2048,
     "registration": "identical transparent canvas for every production layer"
   },
-  "status": "runtime contract ready; binary PNG extraction is being registered against full-character reference",
+  "status": "production contract: 100% of manifest layers plus explicit registration required before rig handoff",
   "layers": [
     "00_back_hair.png",
     "01_body_outfit.png",
@@ -64,5 +64,10 @@
   ],
   "tools": {
     "validator": "rig/bellabunny-layer-validator.html"
+  },
+  "readiness": {
+    "requiredCoverage": 1,
+    "requireExplicitRegistration": true,
+    "allowPartialProductionHandoff": false
   }
 }
