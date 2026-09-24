@@ -1,0 +1,1 @@
+(()=>{window.BellabunnyAvatar={name:'Bellabunny',characterName:'Ashley',art:{canvas:2048,style:'soft anime coquette strawberry bunny',hair:'long curly auburn/reddish-brown',palette:['pink','white','strawberry'],ears:'pink bunny ears'},behavior:{blink:true,breathing:true,hairPhysics:true,earPhysics:true},quality:{requireRegisteredLayers:true,keepFallbackUntilReady:true}}})();
