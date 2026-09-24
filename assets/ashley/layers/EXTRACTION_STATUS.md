@@ -17,3 +17,8 @@ IMPORTANT: These first-pass components are isolated from the reference sheet but
 
 ## Binary upload note
 The current GitHub connector can create/update UTF-8 repository files but does not expose repository binary-file upload. The extracted PNG pack therefore remains a generated artifact until a binary-capable upload path is available; runtime/spec/manifest work can continue in GitHub now.
+
+
+## Verification update — 2026-09-24
+
+The generated 30-layer candidate pack was inspected before promotion. It is not production-ready: the neck layer is empty and the sleeve candidates currently duplicate the arm candidates. Keep the production gate closed until those pieces are corrected and the critical layers pass visual registration.
