@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "canvas": {
+    "width": 2048,
+    "height": 2048
+  },
+  "note": "Canonical Bellabunny production registration. All layers share the same 2048x2048 canvas and are authored for origin stacking.",
+  "layers": {
+    "backHair": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "body": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "neck": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "skirt": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "armL": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "sleeveL": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "armR": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "sleeveR": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "head": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "browL": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "browR": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "eyeL": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "pupilL": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "eyeLClosed": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "eyeR": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "pupilR": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "eyeRClosed": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "mouth": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "frontHairL": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "curlL": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "frontHairR": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "curlR": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "earL": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "earR": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    },
+    "accessories": {
+      "x": 0,
+      "y": 0,
+      "scale": 1,
+      "rotate": 0
+    }
+  }
+}
