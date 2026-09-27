@@ -1,14 +1,23 @@
 (()=>{
   const LOSS_GRACE_MS=450,RECENTER_FRAMES=18;
-  let face,last=-1,running=false,raf=0,resetRaf=0,busy=false,failures=0,lifecycle=0;
+  let face,initTask,last=-1,running=false,raf=0,resetRaf=0,busy=false,failures=0,lifecycle=0;
   let lastSeen=0,lostSince=0,activeVideo=null,activeStatus=()=>{},suspended=false;
 
   async function init(){
     if(face)return face;
-    const v=await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/+esm');
-    const fs=await v.FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm');
-    face=await v.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'},runningMode:'VIDEO',numFaces:1,minFaceDetectionConfidence:.5,minFacePresenceConfidence:.5,minTrackingConfidence:.5,outputFaceBlendshapes:true,outputFacialTransformationMatrixes:true});
-    return face;
+    if(initTask)return initTask;
+    const task=(async()=>{
+      const v=await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/+esm');
+      const fs=await v.FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22/wasm');
+      return v.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'},runningMode:'VIDEO',numFaces:1,minFaceDetectionConfidence:.5,minFacePresenceConfidence:.5,minTrackingConfidence:.5,outputFaceBlendshapes:true,outputFacialTransformationMatrixes:true});
+    })();
+    initTask=task;
+    try{
+      face=await task;
+      return face;
+    }finally{
+      if(initTask===task)initTask=null;
+    }
   }
 
   function neutralize(){
