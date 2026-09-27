@@ -7,6 +7,10 @@
     audio?.close?.().catch?.(()=>{});
   }
 
+  function emit(active,reason){
+    window.dispatchEvent(new CustomEvent('bellabunny:voice',{detail:{active,reason}}));
+  }
+
   function start(){
     if(running)return Promise.resolve();
     if(starting)return starting;
@@ -29,6 +33,10 @@
         stream=nextStream;ctx=nextCtx;analyser=nextAnalyser;
         data=new Uint8Array(analyser.fftSize);
         running=true;
+        const ended=()=>{if(stream===nextStream)stop('stream-ended')};
+        nextStream.addEventListener?.('inactive',ended,{once:true});
+        nextStream.getAudioTracks().forEach(track=>track.addEventListener?.('ended',ended,{once:true}));
+        emit(true,'started');
         loop();
       }catch(error){
         release(nextStream,nextCtx);
@@ -67,16 +75,20 @@
     window.BellabunnyRig?.batch(update);
   }
 
-  function stop(){
+  function stop(reason='stopped'){
+    if(typeof reason!=='string')reason='stopped';
+    const wasActive=running||!!stream;
     request++;
     running=false;
     cancelAnimationFrame(raf);
     raf=0;
-    release(stream,ctx);
+    const oldStream=stream,oldCtx=ctx;
     stream=null;ctx=null;analyser=null;data=null;env=0;
+    release(oldStream,oldCtx);
     const update={breath:0};
     if(!faceOwnsMouth())update.mouthOpen=0;
     window.BellabunnyRig?.batch(update);
+    if(wasActive)emit(false,reason);
   }
 
   window.addEventListener('pagehide',stop);
