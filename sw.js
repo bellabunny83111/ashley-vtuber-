@@ -1,1 +1,12 @@
-const C='bellabunny-studio-dev-v4';const A=['./','./index.html','./ashley-studio.png','./manifest.webmanifest','./rig/bellabunny-parameter-engine.js','./rig/bellabunny-face-tracker.js','./rig/bellabunny-animation-engine.js','./rig/bellabunny-audio.js','./rig/bellabunny-expression-mixer.js','./rig/bellabunny-tracking-calibration.js','./rig/bellabunny-layer-loader.js','./rig/ashley-rig.css','./rig/ashley-rig.html','./rig/ashley-rig.js','./rig/ashley-rig-bridge.js','./assets/ashley/layers/manifest.json'];self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A)).then(()=>self.skipWaiting())));self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim())));self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request).then(r=>{const copy=r.clone();caches.open(C).then(c=>c.put(e.request,copy));return r}).catch(()=>caches.match(e.request)))})
+const CACHE='bellabunny-studio-dev-v5';
+const APP_SHELL=["./","./index.html","./ashley-studio.png","./manifest.webmanifest","./rig/bellabunny-avatar-profile.js","./rig/bellabunny-parameter-engine.js","./rig/bellabunny-face-tracker.js","./rig/bellabunny-animation-engine.js","./rig/bellabunny-expression-mixer.js","./rig/bellabunny-tracking-calibration.js","./rig/bellabunny-audio.js","./rig/bellabunny-layer-loader.js","./rig/bellabunny-registration.js","./rig/bellabunny-art-audit.js","./rig/bellabunny-mouth-controller.js","./rig/bellabunny-autoblink.js","./rig/bellabunny-health.js","./rig/ashley-rig.css","./rig/ashley-rig.html","./rig/ashley-rig.js","./rig/ashley-rig-bridge.js","./assets/ashley/layers/manifest.json","./assets/ashley/layers/registration.json"];
+self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',event=>{
+  const request=event.request;
+  if(request.method!=='GET'||new URL(request.url).origin!==self.location.origin)return;
+  event.respondWith(fetch(request).then(response=>{
+    if(response.ok){const copy=response.clone();event.waitUntil(caches.open(CACHE).then(cache=>cache.put(request,copy)))}
+    return response;
+  }).catch(()=>caches.match(request).then(cached=>cached||(request.mode==='navigate'?caches.match('./index.html'):Promise.reject(new Error('Offline asset unavailable'))))));
+});
