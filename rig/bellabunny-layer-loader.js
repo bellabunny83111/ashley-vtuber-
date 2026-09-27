@@ -62,6 +62,7 @@
     state.ready = state.approvedForProduction
       && state.criticalReady
       && state.loaded === state.total
+      && !!audit?.artLoaded
       && !!audit?.registered;
     state.gateReason = !state.approvedForProduction
       ? 'artwork approval required'
@@ -69,9 +70,11 @@
         ? 'critical layers missing'
         : state.loaded !== state.total
           ? 'manifest coverage incomplete'
-          : !audit?.registered
-            ? 'explicit registration required'
-            : '';
+          : !audit?.artLoaded
+            ? 'artwork decode incomplete'
+            : !audit?.registered
+              ? 'explicit registration required'
+              : '';
   }
 
   function report(host) {
@@ -149,9 +152,10 @@
     if (!host) return;
     const audit = event?.detail || window.BellabunnyArtAudit?.last;
     if (!audit) return;
-    const previous = state.ready;
+    const previousReady = state.ready;
+    const previousReason = state.gateReason;
     updateReadiness(audit);
-    if (state.ready === previous) return;
+    if (state.ready === previousReady && state.gateReason === previousReason) return;
     host.classList.toggle('production-ready', state.ready);
     document.querySelector('#world>img')?.classList.toggle('rig-fallback-hidden', state.ready);
     report(host);
