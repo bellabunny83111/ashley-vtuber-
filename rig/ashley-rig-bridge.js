@@ -18,21 +18,6 @@
   const reset=document.querySelector('#reset');
   reset?.addEventListener('click',()=>window.AshleyRig.reset());
 
-  // Mic bridge: observes existing voice meter so the future mouth layers
-  // can respond without replacing Ashley Studio's working microphone code.
-  const meter=document.querySelector('#level');
-  let last=0;
-  function syncMouth(){
-    if(meter){
-      const n=parseFloat(meter.style.width)||0;
-      const v=Math.max(0,Math.min(1,n/55));
-      last += (v-last)*.35;
-      window.AshleyRig.mouth(last);
-    }
-    requestAnimationFrame(syncMouth);
-  }
-  syncMouth();
-
   world.dataset.rig='v2-connected';
   console.info('Ashley Rig Integration v2 connected 🎀');
 })();
