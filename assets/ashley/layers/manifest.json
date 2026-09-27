@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "canvas": {
     "width": 2048,
     "height": 2048,
@@ -64,6 +64,17 @@
   ],
   "tools": {
     "validator": "rig/bellabunny-layer-validator.html"
+  },
+  "approval": {
+    "status": "NEEDS_REPAIR",
+    "readyForRegistration": false,
+    "approvedForProduction": false,
+    "verifiedAt": null,
+    "blockers": [
+      "02_neck.png is empty in the candidate pack",
+      "23_sleeve_l.png and 24_sleeve_r.png duplicate arm candidates",
+      "The critical neutral stack has not passed visual registration"
+    ]
   },
   "readiness": {
     "requiredCoverage": 1,
