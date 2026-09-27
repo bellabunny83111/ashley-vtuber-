@@ -1,6 +1,6 @@
 (()=>{
   const LOSS_GRACE_MS=450,RECENTER_FRAMES=18;
-  let face,last=-1,running=false,raf=0,resetRaf=0,busy=false,failures=0;
+  let face,last=-1,running=false,raf=0,resetRaf=0,busy=false,failures=0,lifecycle=0;
   let lastSeen=0,lostSince=0,activeVideo=null,activeStatus=()=>{},suspended=false;
 
   async function init(){
@@ -75,10 +75,13 @@
   }
 
   async function start(video,onStatus=()=>{}){
+    const token=++lifecycle;
     await init();
+    if(token!==lifecycle||document.hidden)throw new DOMException('Face tracker start cancelled','AbortError');
     activeVideo=video;activeStatus=onStatus;lastSeen=0;lostSince=0;cancelRecenter();
-    if(running){resume();return}
-    running=true;failures=0;last=-1;suspended=document.hidden;schedule();
+    if(running){resume();return true}
+    running=true;failures=0;last=-1;suspended=false;schedule();
+    return true;
   }
 
   function suspend(){
@@ -97,6 +100,7 @@
   }
 
   function stop(){
+    lifecycle++;
     running=false;suspended=false;
     if(raf)cancelAnimationFrame(raf);
     raf=0;busy=false;last=-1;lastSeen=0;lostSince=0;activeVideo=null;activeStatus=()=>{};
