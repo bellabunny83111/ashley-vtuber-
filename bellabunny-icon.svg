@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Bellabunny app icon</title>
+  <desc id="desc">A cream bunny face with a strawberry bow on a pink background.</desc>
+  <defs>
+    <linearGradient id="bg" x1="48" y1="32" x2="464" y2="480" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff9fca"/>
+      <stop offset="1" stop-color="#9b3a79"/>
+    </linearGradient>
+    <linearGradient id="berry" x1="216" y1="316" x2="296" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff6b9d"/>
+      <stop offset="1" stop-color="#d92e68"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <circle cx="92" cy="92" r="32" fill="#fff" opacity=".16"/>
+  <circle cx="422" cy="132" r="50" fill="#fff" opacity=".10"/>
+  <path d="M171 232C126 180 120 85 164 61c48-26 82 75 83 151" fill="#fff7f0" stroke="#6c2d54" stroke-width="16" stroke-linejoin="round"/>
+  <path d="M341 232c45-52 51-147 7-171-48-26-82 75-83 151" fill="#fff7f0" stroke="#6c2d54" stroke-width="16" stroke-linejoin="round"/>
+  <path d="M174 191c-15-42-10-89 3-103 16 13 30 61 30 110" fill="#f7a9c9"/>
+  <path d="M338 191c15-42 10-89-3-103-16 13-30 61-30 110" fill="#f7a9c9"/>
+  <ellipse cx="256" cy="278" rx="142" ry="126" fill="#fff7f0" stroke="#6c2d54" stroke-width="16"/>
+  <ellipse cx="205" cy="267" rx="14" ry="22" fill="#49223f"/>
+  <ellipse cx="307" cy="267" rx="14" ry="22" fill="#49223f"/>
+  <circle cx="200" cy="260" r="5" fill="#fff"/>
+  <circle cx="302" cy="260" r="5" fill="#fff"/>
+  <ellipse cx="165" cy="305" rx="28" ry="14" fill="#f6a2c4" opacity=".72"/>
+  <ellipse cx="347" cy="305" rx="28" ry="14" fill="#f6a2c4" opacity=".72"/>
+  <path d="M244 298q12-10 24 0-3 17-12 17t-12-17Z" fill="#d85a82"/>
+  <path d="M256 315c-3 17-18 22-29 14m29-14c3 17 18 22 29 14" fill="none" stroke="#6c2d54" stroke-width="8" stroke-linecap="round"/>
+  <path d="M214 365c-32-23-62-9-67 20 24 25 55 31 82 12m69-32c32-23 62-9 67 20-24 25-55 31-82 12" fill="#ff86b2" stroke="#6c2d54" stroke-width="12" stroke-linejoin="round"/>
+  <path d="M256 354c-29 0-48 21-42 46 8 34 42 57 42 57s34-23 42-57c6-25-13-46-42-46Z" fill="url(#berry)" stroke="#6c2d54" stroke-width="12" stroke-linejoin="round"/>
+  <path d="M229 362c13-22 41-27 54 0-17 12-37 12-54 0Z" fill="#66a85e" stroke="#3d7041" stroke-width="8" stroke-linejoin="round"/>
+  <g fill="#ffd8a3">
+    <ellipse cx="239" cy="391" rx="4" ry="7" transform="rotate(-20 239 391)"/>
+    <ellipse cx="273" cy="391" rx="4" ry="7" transform="rotate(20 273 391)"/>
+    <ellipse cx="256" cy="420" rx="4" ry="7"/>
+  </g>
+</svg>
