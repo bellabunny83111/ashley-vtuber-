@@ -1,1 +1,26 @@
-{"name":"Ashley Studio Frankenstein VTuber","short_name":"Ashley Studio","start_url":"./index.html","display":"standalone","background_color":"#35102d","theme_color":"#ff7fbd","icons":[]}
+{
+  "id": "./",
+  "name": "Bellabunny VTuber Studio",
+  "short_name": "Bellabunny",
+  "description": "A playful live Bellabunny VTuber studio.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#35102d",
+  "theme_color": "#ff7fbd",
+  "icons": [
+    {
+      "src": "./bellabunny-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./bellabunny-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
