@@ -53,9 +53,9 @@
   }
 
   const oldPose=window.pose;
-  window.pose=function(nx,ny){
-    if(typeof oldPose==='function') oldPose(nx,ny);
-    window.AshleyRig.look(nx,ny);
+  window.pose=function(nx,ny,nz=0){
+    if(typeof oldPose==='function') oldPose(nx,ny,nz);
+    window.AshleyRig.look(nx,ny,nz);
   };
 
   const oldAct=window.act;
