@@ -20,10 +20,15 @@
     }
   }
 
+  function publishHead(x,y){
+    window.dispatchEvent(new CustomEvent('bellabunny:head',{detail:{x,y}}));
+  }
+
   function neutralize(){
     const neutral={headX:0,headY:0,headZ:0,eyeLookX:0,eyeLookY:0,eyeOpenL:1,eyeOpenR:1,blinkL:0,blinkR:0,smile:0,browL:0,browR:0};
     if(!window.BellabunnyVoice?.active)neutral.mouthOpen=0;
     window.BellabunnyRig?.batch(neutral);
+    publishHead(0,0);
   }
 
   function cancelRecenter(){
@@ -74,6 +79,7 @@
         let p={x:(n.x-cx)*8,y:(n.y-cy-.10)*6};
         p=window.BellabunnyCalibration?.map(p.x,p.y)||p;
         window.BellabunnyRig?.batch({headX:p.x,headY:p.y,...window.BellabunnyRig.fromBlendshapes(r.faceBlendshapes?.[0]?.categories||[])});
+        publishHead(p.x,p.y);
         onStatus(true,r);
       }else reportLoss(onStatus,r);
     }catch(e){
