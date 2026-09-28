@@ -20,15 +20,15 @@
     }
   }
 
-  function publishHead(x,y){
-    window.dispatchEvent(new CustomEvent('bellabunny:head',{detail:{x,y}}));
+  function publishHead(x,y,z=0){
+    window.dispatchEvent(new CustomEvent('bellabunny:head',{detail:{x,y,z}}));
   }
 
   function neutralize(){
     const neutral={headX:0,headY:0,headZ:0,eyeLookX:0,eyeLookY:0,eyeOpenL:1,eyeOpenR:1,blinkL:0,blinkR:0,smile:0,browL:0,browR:0};
     if(!window.BellabunnyVoice?.active)neutral.mouthOpen=0;
     window.BellabunnyRig?.batch(neutral);
-    publishHead(0,0);
+    publishHead(0,0,0);
   }
 
   function cancelRecenter(){
@@ -76,10 +76,10 @@
       if(lm){
         lastSeen=performance.now();lostSince=0;failures=0;cancelRecenter();
         const n=lm[1],l=lm[33],rr=lm[263],cx=(l.x+rr.x)/2,cy=(l.y+rr.y)/2;
-        let p={x:(n.x-cx)*8,y:(n.y-cy-.10)*6};
-        p=window.BellabunnyCalibration?.map(p.x,p.y)||p;
-        window.BellabunnyRig?.batch({headX:p.x,headY:p.y,...window.BellabunnyRig.fromBlendshapes(r.faceBlendshapes?.[0]?.categories||[])});
-        publishHead(p.x,p.y);
+        let p={x:(n.x-cx)*8,y:(n.y-cy-.10)*6,z:Math.max(-1,Math.min(1,Math.atan2(rr.y-l.y,rr.x-l.x)*2.2))};
+        p=window.BellabunnyCalibration?.map(p.x,p.y,p.z)||p;
+        window.BellabunnyRig?.batch({headX:p.x,headY:p.y,headZ:p.z,...window.BellabunnyRig.fromBlendshapes(r.faceBlendshapes?.[0]?.categories||[])});
+        publishHead(p.x,p.y,p.z);
         onStatus(true,r);
       }else reportLoss(onStatus,r);
     }catch(e){
