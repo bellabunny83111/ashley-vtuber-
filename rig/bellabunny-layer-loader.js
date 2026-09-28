@@ -3,6 +3,7 @@
   let state = {
     loaded: 0,
     missing: 0,
+    deferred: 0,
     total: 0,
     ready: false,
     criticalReady: false,
@@ -116,13 +117,34 @@
     const host = document.querySelector('[data-ashley-rig]');
     if (!host) return manifest;
     const files = manifest.layers.map(layer => typeof layer === 'string' ? layer : layer.file);
+    const approval = manifest.approval || {};
+    const approvedForProduction = manifestApproved(manifest);
+    if (!approvedForProduction) {
+      if (id !== run) return manifest;
+      state = {
+        loaded: 0,
+        missing: 0,
+        deferred: files.length,
+        total: files.length,
+        ready: false,
+        criticalReady: false,
+        criticalMissing: [],
+        artworkStatus: approval.status || 'MISSING',
+        approvedForProduction: false,
+        gateReason: 'artwork approval required'
+      };
+      host.classList.remove('production-ready');
+      document.querySelector('#world>img')?.classList.remove('rig-fallback-hidden');
+      report(host);
+      return manifest;
+    }
     const results = await Promise.all(files.map(async file => [file, await probe(file)]));
     if (id !== run) return manifest;
     const available = new Set(results.filter(result => result[1]).map(result => result[0]));
-    const approval = manifest.approval || {};
     state = {
       loaded: available.size,
       missing: files.length - available.size,
+      deferred: 0,
       total: files.length,
       ready: false,
       criticalReady: false,
