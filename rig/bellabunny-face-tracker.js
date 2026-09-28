@@ -1,5 +1,5 @@
 (()=>{
-  const LOSS_GRACE_MS=450,RECENTER_FRAMES=18,TRACK_INTERVAL_MS=1000/30;
+  const LOSS_GRACE_MS=450,RECENTER_FRAMES=18,TRACK_INTERVAL_MS=1000/30,TRACK_INTERVAL_EPSILON_MS=1;
   let face,initTask,last=-1,running=false,raf=0,resetRaf=0,busy=false,failures=0,lifecycle=0;
   let lastSeen=0,lostSince=0,lastProcessAt=-Infinity,activeVideo=null,activeStatus=()=>{},suspended=false;
 
@@ -68,7 +68,7 @@
     if(!running||suspended)return;
     const video=activeVideo,onStatus=activeStatus,now=performance.now();
     schedule();
-    if(!video||busy||document.hidden||video.readyState<2||video.currentTime===last||now-lastProcessAt<TRACK_INTERVAL_MS)return;
+    if(!video||busy||document.hidden||video.readyState<2||video.currentTime===last||now-lastProcessAt<TRACK_INTERVAL_MS-TRACK_INTERVAL_EPSILON_MS)return;
     lastProcessAt=now;
     busy=true;
     try{
