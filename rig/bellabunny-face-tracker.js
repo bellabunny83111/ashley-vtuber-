@@ -1,7 +1,7 @@
 (()=>{
-  const LOSS_GRACE_MS=450,RECENTER_FRAMES=18;
+  const LOSS_GRACE_MS=450,RECENTER_FRAMES=18,TRACK_INTERVAL_MS=1000/30;
   let face,initTask,last=-1,running=false,raf=0,resetRaf=0,busy=false,failures=0,lifecycle=0;
-  let lastSeen=0,lostSince=0,activeVideo=null,activeStatus=()=>{},suspended=false;
+  let lastSeen=0,lostSince=0,lastProcessAt=-Infinity,activeVideo=null,activeStatus=()=>{},suspended=false;
 
   async function init(){
     if(face)return face;
@@ -66,15 +66,16 @@
   function loop(){
     raf=0;
     if(!running||suspended)return;
-    const video=activeVideo,onStatus=activeStatus;
+    const video=activeVideo,onStatus=activeStatus,now=performance.now();
     schedule();
-    if(!video||busy||document.hidden||video.readyState<2||video.currentTime===last)return;
+    if(!video||busy||document.hidden||video.readyState<2||video.currentTime===last||now-lastProcessAt<TRACK_INTERVAL_MS)return;
+    lastProcessAt=now;
     busy=true;
     try{
       last=video.currentTime;
-      const r=face.detectForVideo(video,performance.now()),lm=r.faceLandmarks?.[0];
+      const r=face.detectForVideo(video,now),lm=r.faceLandmarks?.[0];
       if(lm){
-        lastSeen=performance.now();lostSince=0;failures=0;cancelRecenter();
+        lastSeen=now;lostSince=0;failures=0;cancelRecenter();
         const n=lm[1],l=lm[33],rr=lm[263],cx=(l.x+rr.x)/2,cy=(l.y+rr.y)/2;
         let p={x:(n.x-cx)*8,y:(n.y-cy-.10)*6,z:Math.max(-1,Math.min(1,Math.atan2(rr.y-l.y,rr.x-l.x)*2.2))};
         p=window.BellabunnyCalibration?.map(p.x,p.y,p.z)||p;
@@ -95,7 +96,7 @@
     if(token!==lifecycle||document.hidden)throw new DOMException('Face tracker start cancelled','AbortError');
     activeVideo=video;activeStatus=onStatus;lastSeen=0;lostSince=0;cancelRecenter();
     if(running){resume();return true}
-    running=true;failures=0;last=-1;suspended=false;schedule();
+    running=true;failures=0;last=-1;lastProcessAt=-Infinity;suspended=false;schedule();
     return true;
   }
 
@@ -103,12 +104,12 @@
     if(!running)return;
     suspended=true;
     if(raf)cancelAnimationFrame(raf);
-    raf=0;busy=false;last=-1;
+    raf=0;busy=false;last=-1;lastProcessAt=-Infinity;
   }
 
   function resume(){
     if(!running||document.hidden)return;
-    suspended=false;busy=false;last=-1;
+    suspended=false;busy=false;last=-1;lastProcessAt=-Infinity;
     const video=activeVideo;
     if(video?.paused&&video.srcObject)video.play().catch(()=>{});
     schedule();
@@ -118,7 +119,7 @@
     lifecycle++;
     running=false;suspended=false;
     if(raf)cancelAnimationFrame(raf);
-    raf=0;busy=false;last=-1;lastSeen=0;lostSince=0;activeVideo=null;activeStatus=()=>{};
+    raf=0;busy=false;last=-1;lastProcessAt=-Infinity;lastSeen=0;lostSince=0;activeVideo=null;activeStatus=()=>{};
     recenter();
   }
 
