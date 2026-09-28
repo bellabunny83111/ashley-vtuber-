@@ -20,7 +20,8 @@
 
     const state=window.BellabunnyLayers?.state;
     if(state){
-      add('Production artwork files',state.criticalReady&&state.loaded===state.total,state.loaded+'/'+state.total+' layers','production');
+      const deferred=state.deferred>0;
+      add('Production artwork files',!deferred&&state.criticalReady&&state.loaded===state.total,deferred?state.deferred+' layers deferred until approval':state.loaded+'/'+state.total+' layers','production');
       add('Production approval',state.approvedForProduction,state.artworkStatus+(state.gateReason?' · '+state.gateReason:''),'production');
     }else{
       add('Production artwork files',false,'layer state unavailable','production');
@@ -28,13 +29,18 @@
     }
 
     let audit=null;
-    try{audit=window.BellabunnyArtAudit?.audit?.()||null}catch(error){console.warn('Bellabunny art audit failed',error)}
-    if(audit){
-      add('Critical art decoded',audit.artLoaded,audit.missing?.join(', ')||'complete','production');
-      add('Artwork registered',audit.registered,audit.registered?'verified':audit.unregistered?.join(', ')||'registration required','production');
+    if(state?.deferred>0){
+      add('Critical art decoded',false,'deferred until artwork approval','production');
+      add('Artwork registered',false,'pending artwork approval','production');
     }else{
-      add('Critical art decoded',false,'audit unavailable','production');
-      add('Artwork registered',false,'audit unavailable','production');
+      try{audit=window.BellabunnyArtAudit?.audit?.()||null}catch(error){console.warn('Bellabunny art audit failed',error)}
+      if(audit){
+        add('Critical art decoded',audit.artLoaded,audit.missing?.join(', ')||'complete','production');
+        add('Artwork registered',audit.registered,audit.registered?'verified':audit.unregistered?.join(', ')||'registration required','production');
+      }else{
+        add('Critical art decoded',false,'audit unavailable','production');
+        add('Artwork registered',false,'audit unavailable','production');
+      }
     }
 
     const runtimeChecks=checks.filter(check=>check.scope==='runtime');
