@@ -1,6 +1,6 @@
 (()=>{
   const checks=[];
-  let last={ok:false,playable:false,productionReady:false,checks:[]};
+  let last={ok:false,playable:false,productionReady:false,checks:[]},destroyed=false;\n  const timers=new Set();\n\n  function later(delay){\n    const timer=setTimeout(()=>{timers.delete(timer);if(!destroyed)run()},delay);\n    timers.add(timer);\n  }
 
   function add(name,ok,detail='',scope='runtime'){
     checks.push({name,ok:!!ok,detail,scope});
