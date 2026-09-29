@@ -1,12 +1,19 @@
 (()=>{
-  const checks=[];
-  let last={ok:false,playable:false,productionReady:false,checks:[]},destroyed=false;\n  const timers=new Set();\n\n  function later(delay){\n    const timer=setTimeout(()=>{timers.delete(timer);if(!destroyed)run()},delay);\n    timers.add(timer);\n  }
+  const checks=[],timers=new Set();
+  let last={ok:false,playable:false,productionReady:false,checks:[]},destroyed=false;
+
+  function later(delay){
+    const timer=setTimeout(()=>{timers.delete(timer);if(!destroyed)run()},delay);
+    timers.add(timer);
+    return timer;
+  }
 
   function add(name,ok,detail='',scope='runtime'){
     checks.push({name,ok:!!ok,detail,scope});
   }
 
   async function run(){
+    if(destroyed)return checks.map(check=>({...check}));
     checks.length=0;
     const secure=location.protocol==='https:'||location.hostname==='localhost';
     add('Secure camera context',secure,location.protocol);
@@ -52,12 +59,21 @@
     return checks.map(check=>({...check}));
   }
 
+  const onLayers=()=>later(120),onRegistration=()=>later(30);
+  function destroy(){
+    if(destroyed)return;
+    destroyed=true;
+    timers.forEach(clearTimeout);timers.clear();
+    window.removeEventListener('bellabunny:layers',onLayers);
+    window.removeEventListener('bellabunny:registration',onRegistration);
+  }
+
   window.BellabunnyHealth={
-    run,
+    run,destroy,
     get checks(){return checks.map(check=>({...check}))},
     get status(){return{...last,checks:last.checks.map(check=>({...check}))}}
   };
-  window.addEventListener('bellabunny:layers',()=>setTimeout(run,120));
-  window.addEventListener('bellabunny:registration',()=>setTimeout(run,30));
-  setTimeout(run,700);
+  window.addEventListener('bellabunny:layers',onLayers);
+  window.addEventListener('bellabunny:registration',onRegistration);
+  later(700);
 })();
