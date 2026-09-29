@@ -126,9 +126,19 @@
     recenter();
   }
 
-  function destroy(){stop();face?.close?.();face=null}
-  document.addEventListener('visibilitychange',()=>document.hidden?suspend():resume());
-  window.addEventListener('pagehide',suspend);
-  window.addEventListener('pageshow',resume);
+  function onVisibility(){document.hidden?suspend():resume()}
+  function onPageHide(){suspend()}
+  function onPageShow(){resume()}
+
+  function destroy(){
+    stop();face?.close?.();face=null;
+    document.removeEventListener('visibilitychange',onVisibility);
+    window.removeEventListener('pagehide',onPageHide);
+    window.removeEventListener('pageshow',onPageShow);
+  }
+
+  document.addEventListener('visibilitychange',onVisibility);
+  window.addEventListener('pagehide',onPageHide);
+  window.addEventListener('pageshow',onPageShow);
   window.BellabunnyFaceTracker={init,start,stop,destroy,suspend,resume,recenter,hasRecentFace,get running(){return running},get lastSeen(){return lastSeen}};
 })();
