@@ -55,9 +55,17 @@
     else pause();
   }
 
-  document.addEventListener('visibilitychange',()=>document.hidden?pause():resume());
+  const onVisibility=()=>document.hidden?pause():resume();
+  function destroy(){
+    enabled=false;pause();clearTimeout(reopenTimer);reopenTimer=0;blinking=false;
+    document.removeEventListener('visibilitychange',onVisibility);
+    window.removeEventListener('pagehide',pause);
+    window.removeEventListener('pageshow',resume);
+  }
+
+  document.addEventListener('visibilitychange',onVisibility);
   window.addEventListener('pagehide',pause);
   window.addEventListener('pageshow',resume);
   schedule();
-  window.BellabunnyAutoBlink={enable,pause,resume,blink,get enabled(){return enabled}};
+  window.BellabunnyAutoBlink={enable,pause,resume,blink,destroy,get enabled(){return enabled}};
 })();
