@@ -91,10 +91,18 @@
     if(wasActive)emit(false,reason);
   }
 
-  window.addEventListener('pagehide',stop);
+  function onPageHide(){stop('pagehide')}
+
+  function destroy(){
+    stop('destroyed');
+    window.removeEventListener('pagehide',onPageHide);
+  }
+
+  window.addEventListener('pagehide',onPageHide);
   window.BellabunnyVoice={
     start,
     stop,
+    destroy,
     get active(){return running},
     get pending(){return !!starting},
     get level(){return env},
