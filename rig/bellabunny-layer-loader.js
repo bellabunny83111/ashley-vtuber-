@@ -13,6 +13,7 @@
     gateReason: 'manifest not loaded'
   };
   let run = 0;
+  let destroyed = false;
 
   const slots = {
     backHair: '00_back_hair.png',
@@ -109,6 +110,7 @@
   }
 
   async function load() {
+    if (destroyed) return null;
     const id = ++run;
     const manifest = await fetch(root + 'manifest.json', { cache: 'no-store' }).then(response => {
       if (!response.ok) throw new Error('Bellabunny manifest ' + response.status);
@@ -120,7 +122,7 @@
     const approval = manifest.approval || {};
     const approvedForProduction = manifestApproved(manifest);
     if (!approvedForProduction) {
-      if (id !== run) return manifest;
+      if (destroyed || id !== run) return manifest;
       state = {
         loaded: 0,
         missing: 0,
@@ -139,7 +141,7 @@
       return manifest;
     }
     const results = await Promise.all(files.map(async file => [file, await probe(file)]));
-    if (id !== run) return manifest;
+    if (destroyed || id !== run) return manifest;
     const available = new Set(results.filter(result => result[1]).map(result => result[0]));
     state = {
       loaded: available.size,
@@ -170,6 +172,7 @@
   }
 
   function syncAudit(event) {
+    if (destroyed) return;
     const host = document.querySelector('[data-ashley-rig]');
     if (!host) return;
     const audit = event?.detail || window.BellabunnyArtAudit?.last;
@@ -183,9 +186,17 @@
     report(host);
   }
 
+  function destroy() {
+    if (destroyed) return;
+    destroyed = true;
+    ++run;
+    removeEventListener('bellabunny:art-audit', syncAudit);
+  }
+
   addEventListener('bellabunny:art-audit', syncAudit);
   window.BellabunnyLayers = {
     load,
+    destroy,
     get state() { return { ...state }; },
     critical: [...critical]
   };
