@@ -1,5 +1,6 @@
 (() => {
   const root = 'assets/ashley/layers/';
+  const manifestUrl = root + 'manifest.json?v=47';
   let state = {
     loaded: 0,
     missing: 0,
@@ -112,7 +113,7 @@
   async function load() {
     if (destroyed) return null;
     const id = ++run;
-    const manifest = await fetch(root + 'manifest.json', { cache: 'no-store' }).then(response => {
+    const manifest = await fetch(manifestUrl, { cache: 'no-store' }).then(response => {
       if (!response.ok) throw new Error('Bellabunny manifest ' + response.status);
       return response.json();
     });
