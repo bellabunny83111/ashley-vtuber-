@@ -99,7 +99,8 @@
     release(oldStream,oldCtx);
     const update={breath:0};
     if(!faceOwnsMouth())update.mouthOpen=0;
-    window.BellabunnyRig?.batch(update);
+    if(window.BellabunnyRig?.snap)window.BellabunnyRig.snap(update);
+    else window.BellabunnyRig?.batch(update);
     if(wasActive)emit(false,reason);
   }
 
