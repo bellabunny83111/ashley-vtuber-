@@ -1,6 +1,6 @@
 (()=>{
-  let ctx,analyser,data,stream,running=false,env=0,hold=0,raf=0,request=0,starting=null;
-  const cfg={threshold:.035,attack:.62,release:.14,holdMs:70,faceGraceMs:450};
+  let ctx,analyser,data,stream,running=false,env=0,hold=0,raf=0,request=0,starting=null,noiseFloor=.012;
+  const cfg={threshold:.018,gain:12,noiseFloorStart:.012,noiseGate:2.2,noiseRise:.012,noiseFall:.08,attack:.62,release:.14,holdMs:70,faceGraceMs:450};
 
   function release(media,audio){
     media?.getTracks().forEach(t=>t.stop());
@@ -67,7 +67,13 @@
       sum+=v*v;
     }
     const rms=Math.sqrt(sum/data.length);
-    const target=rms>cfg.threshold?Math.min(1,(rms-cfg.threshold)*6):0;
+    const gate=Math.max(cfg.threshold,noiseFloor*cfg.noiseGate);
+    if(rms<gate){
+      const rate=rms>noiseFloor?cfg.noiseRise:cfg.noiseFall;
+      noiseFloor+=Math.max(-.004,Math.min(.004,rms-noiseFloor))*rate;
+    }
+    const activeGate=Math.max(cfg.threshold,noiseFloor*cfg.noiseGate);
+    const target=rms>activeGate?Math.min(1,(rms-activeGate)*cfg.gain):0;
     if(target>env){
       env+=(target-env)*cfg.attack;
       hold=performance.now()+cfg.holdMs;
@@ -85,7 +91,7 @@
     cancelAnimationFrame(raf);
     raf=0;
     const oldStream=stream,oldCtx=ctx;
-    stream=null;ctx=null;analyser=null;data=null;env=0;
+    stream=null;ctx=null;analyser=null;data=null;env=0;noiseFloor=cfg.noiseFloorStart;
     release(oldStream,oldCtx);
     const update={breath:0};
     if(!faceOwnsMouth())update.mouthOpen=0;
@@ -109,6 +115,7 @@
     get pending(){return !!starting},
     get level(){return env},
     get source(){return faceOwnsMouth()?'face':'microphone'},
-    config:cfg
+    config:cfg,
+    get noiseFloor(){return noiseFloor}
   };
 })();
