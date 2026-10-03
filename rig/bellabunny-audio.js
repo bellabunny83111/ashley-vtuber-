@@ -18,12 +18,14 @@
     const task=(async()=>{
       let nextStream,nextCtx;
       try{
-        nextStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
-        if(token!==request||document.hidden)throw new DOMException('Microphone start cancelled','AbortError');
         const AC=window.AudioContext||window.webkitAudioContext;
         if(!AC)throw new Error('Web Audio unavailable');
+        // iOS requires AudioContext activation to happen inside the original tap.
+        // Activate it before waiting for the microphone permission prompt.
         nextCtx=new AC();
         await nextCtx.resume();
+        if(token!==request||document.hidden)throw new DOMException('Microphone start cancelled','AbortError');
+        nextStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
         if(token!==request||document.hidden)throw new DOMException('Microphone start cancelled','AbortError');
         const src=nextCtx.createMediaStreamSource(nextStream);
         const nextAnalyser=nextCtx.createAnalyser();
