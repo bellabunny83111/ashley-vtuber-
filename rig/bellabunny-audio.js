@@ -1,6 +1,6 @@
 (()=>{
   let ctx,analyser,data,stream,running=false,env=0,hold=0,raf=0,request=0,starting=null,noiseFloor=.012;
-  const cfg={threshold:.018,gain:12,noiseFloorStart:.012,noiseGate:2.2,noiseRise:.012,noiseFall:.08,attack:.62,release:.14,holdMs:70,faceGraceMs:450};
+  const cfg={threshold:.018,gain:18,noiseFloorStart:.012,noiseGate:1.25,noiseLearnCeiling:.24,maxNoiseFloor:.03,noiseRise:.03,noiseFall:.08,attack:.62,release:.14,holdMs:70,faceGraceMs:450};
 
   function release(media,audio){
     media?.getTracks().forEach(t=>t.stop());
@@ -68,9 +68,13 @@
     }
     const rms=Math.sqrt(sum/data.length);
     const gate=Math.max(cfg.threshold,noiseFloor*cfg.noiseGate);
-    if(rms<gate){
+    const preliminary=rms>gate?Math.min(1,(rms-gate)*cfg.gain):0;
+    // Learn steady low-level room noise even when it begins just above the
+    // initial gate, but never absorb speech or let the gate climb unchecked.
+    if(preliminary<cfg.noiseLearnCeiling){
       const rate=rms>noiseFloor?cfg.noiseRise:cfg.noiseFall;
-      noiseFloor+=Math.max(-.004,Math.min(.004,rms-noiseFloor))*rate;
+      const delta=Math.max(-.006,Math.min(.006,rms-noiseFloor));
+      noiseFloor=Math.max(.004,Math.min(cfg.maxNoiseFloor,noiseFloor+delta*rate));
     }
     const activeGate=Math.max(cfg.threshold,noiseFloor*cfg.noiseGate);
     const target=rms>activeGate?Math.min(1,(rms-activeGate)*cfg.gain):0;
