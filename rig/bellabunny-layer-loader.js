@@ -136,7 +136,7 @@
         gateReason: 'artwork approval required'
       };
       host.classList.remove('production-ready');
-      document.querySelector('#world>img')?.classList.remove('rig-fallback-hidden');
+      document.querySelector('#dev-puppet')?.classList.remove('rig-fallback-hidden');
       report(host);
       return manifest;
     }
@@ -166,7 +166,7 @@
     state.criticalReady = state.criticalMissing.length === 0;
     updateReadiness(window.BellabunnyArtAudit?.audit?.());
     host.classList.toggle('production-ready', state.ready);
-    document.querySelector('#world>img')?.classList.toggle('rig-fallback-hidden', state.ready);
+    document.querySelector('#dev-puppet')?.classList.toggle('rig-fallback-hidden', state.ready);
     report(host);
     return manifest;
   }
@@ -182,7 +182,7 @@
     updateReadiness(audit);
     if (state.ready === previousReady && state.gateReason === previousReason) return;
     host.classList.toggle('production-ready', state.ready);
-    document.querySelector('#world>img')?.classList.toggle('rig-fallback-hidden', state.ready);
+    document.querySelector('#dev-puppet')?.classList.toggle('rig-fallback-hidden', state.ready);
     report(host);
   }
 
